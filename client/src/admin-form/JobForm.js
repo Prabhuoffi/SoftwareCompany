@@ -40,15 +40,18 @@ const JobForm = ({ formData, handleChange, handleSubmit, editingJob, resetForm, 
       onChange={handleChange}
       required
     />
-    <button type="submit" className="bg-purple-600 text-white p-3 rounded">
-      {loading ? 'Processing...' : (editingJob ? 'Update Job' : 'Add Job')}
-      {editingJob ? <FaEdit className="ml-2" /> : <FaPlus className="ml-2" />}
-    </button>
-    {editingJob && (
-      <button type="button" onClick={resetForm} className="ml-4 bg-gray-400 text-white p-3 rounded">
-        <AiOutlineClose className="mr-2" /> Cancel
-      </button>
-    )}
+     <div className="flex justify-between items-center mt-4"> {/* Flex container for buttons */}
+        <button type="submit" className="bg-purple-600 text-white p-3 rounded transition duration-300 hover:bg-purple-700">
+          {loading ? 'Processing...' : (editingJob ? 'Update Job' : 'Add Job')}
+          {editingJob ? <FaEdit className="ml-2" /> : <FaPlus className="ml-2" />}
+        </button>
+        {editingJob && (
+          <button type="button" onClick={resetForm} className="bg-gray-400 text-white p-3 rounded transition duration-300 hover:bg-gray-500">
+            <AiOutlineClose className="mr-2" /> Cancel
+          </button>
+        )}
+      </div>
+  
   </form>
 );
 

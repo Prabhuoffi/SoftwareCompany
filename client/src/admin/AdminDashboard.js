@@ -157,7 +157,7 @@ const AdminDashboard = () => {
   return (
     <div className="container mx-auto p-8">
       <h1 className="text-3xl w-full font-bold text-white bg-purple-600 text-center py-4 mb-6 shadow-md">
-        Welcome To HR Dashboard
+        Welcome To Dashboard
       </h1>
 
       {notification && <div className="bg-yellow-300 p-4 mb-4 rounded">{notification}</div>}

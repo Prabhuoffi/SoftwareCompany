@@ -1,27 +1,50 @@
-// SendProfileShortlist.jsx
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { FaPaperPlane } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify'; // Import toast and ToastContainer
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS for toast notifications
 
-const SendProfileShortlist = ({ applications, hrEmail, interviewDetails, loading, setNotification }) => {
+const SendProfileShortlist = ({ applications, hrEmail, interviewDetails, loading }) => {
   const [sending, setSending] = useState(false);
 
   const sendProfileShortlist = async (application) => {
-    const { email, name } = application; // Assuming application has 'email' and 'name'
-    const { date, place, time } = interviewDetails;
+    const { email, name } = application;
+    const { date, place, time ,role ,hrContact } = interviewDetails;
 
     if (!hrEmail) {
-      alert('Please provide HR email address.');
+      toast.error('Please provide HR email address.');
       return;
     }
 
     if (!date || !place || !time) {
-      alert('Please fill out all interview details.');
+      toast.error('Please fill out all interview details.');
       return;
     }
 
-    const interviewInfo = `Date: ${date}\nPlace: ${place}\nTime: ${time}`;
+    const interviewInfo = `
+Interview Details
+
+Date: ${date}
+
+Place: ${place}
+
+Role:${role}
+
+Time: ${time}
+
+HR Contact :${hrContact}
+
+Please be prepared with the following:
+- Updated resume
+- Portfolio of your work (if applicable)
+- Any questions you may have about the position or company
+
+We look forward to meeting you!
+
+Best Regards,
+[Techworka]
+`;
+
 
     try {
       await axios.post(
@@ -34,21 +57,21 @@ const SendProfileShortlist = ({ applications, hrEmail, interviewDetails, loading
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         }
       );
-      setNotification('Profile and interview details sent to Candidate successfully!');
+      toast.success(`Profile and interview details sent to ${name} successfully!`);
     } catch (error) {
       console.error('Error sending profile:', error);
-      setNotification('Failed to send profile.');
+      toast.error(`Failed to send profile for ${name}.`);
     }
   };
 
   const handleSendAll = async () => {
     if (!hrEmail) {
-      alert('Please provide HR email address.');
+      toast.error('Please provide HR email address.');
       return;
     }
 
     if (!interviewDetails.date || !interviewDetails.place || !interviewDetails.time) {
-      alert('Please fill out all interview details.');
+      toast.error('Please fill out all interview details.');
       return;
     }
 
@@ -57,7 +80,7 @@ const SendProfileShortlist = ({ applications, hrEmail, interviewDetails, loading
       for (const application of applications) {
         await sendProfileShortlist(application);
       }
-      setNotification('All profiles sent to HR successfully!');
+      toast.success('All profiles sent to HR successfully!');
     } catch (error) {
       // Error handling is already done in sendProfileShortlist
     } finally {
@@ -111,9 +134,10 @@ const SendProfileShortlist = ({ applications, hrEmail, interviewDetails, loading
           }`}
           disabled={sending || loading}
         >
-          {sending || loading ? 'Sending All...' : 'Send All Shortlists'} <FaPaperPlane className="ml-2" />
+          {sending || loading ? 'Sending All...' : 'Send All Shortlists In HR'} <FaPaperPlane className="ml-2" />
         </button>
       )}
+      <ToastContainer position="top-right" autoClose={3000} /> {/* Add ToastContainer here */}
     </div>
   );
 };

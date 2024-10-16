@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -20,11 +22,15 @@ const Register = () => {
     e.preventDefault();
     try {
       await axios.post('http://localhost:5000/api/auth/register', formData);
-      alert('Registration successful!');
+      toast.success('Registration successful!', {
+        position: 'top-right', // Set position to top-right
+      });
       navigate('/login');
     } catch (error) {
       console.error(error.response.data.message);
-      alert(error.response.data.message);
+      toast.error(error.response.data.message, {
+        position: 'top-right', // Set position to top-right
+      });
     }
   };
 
@@ -72,6 +78,16 @@ const Register = () => {
           Register
         </button>
       </form>
+      <ToastContainer
+        position="top-right" // Positioning of the toast notifications
+        autoClose={3000} // Auto close after 3 seconds
+        hideProgressBar={false} // Show the progress bar
+        closeOnClick // Close on click
+        pauseOnHover // Pause on hover
+        draggable // Allow dragging
+        pauseOnFocusLoss // Pause on focus loss
+        theme="light" // Use light theme for the toast
+      />
     </div>
   );
 };
