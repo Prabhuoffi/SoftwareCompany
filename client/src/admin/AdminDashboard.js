@@ -22,6 +22,21 @@ const AdminDashboard = () => {
     place: '',
     time: '',
   });
+
+  const [markedApplications, setMarkedApplications] = useState(new Set());
+
+  const toggleMarkApplication = (id) => {
+    setMarkedApplications((prevMarked) => {
+      const newMarked = new Set(prevMarked);
+      if (newMarked.has(id)) {
+        newMarked.delete(id); // Remove mark if already marked
+      } else {
+        newMarked.add(id); // Add mark if not marked
+      }
+      return newMarked;
+    });
+  };
+
   const [hrEmail, setHrEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState('');
@@ -189,8 +204,13 @@ const AdminDashboard = () => {
       <JobList jobs={jobs} handleEdit={handleEdit} handleDelete={handleDelete} loading={loading} />
 
       {/* Applications List */}
+      
       <div className="mb-8 border mt-8 p-6 rounded-lg shadow-lg bg-white">
-        <ApplicationsList applications={applications} />
+      <ApplicationsList 
+        applications={applications} 
+        markAsViewed={toggleMarkApplication} // Pass the marking function
+        markedApplications={markedApplications} // Pass the marked applications state
+      />
       </div>
 
       {/* Send Profile Shortlist */}

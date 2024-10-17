@@ -1,7 +1,7 @@
 import React from 'react';
-import { AiOutlineDownload } from 'react-icons/ai'; // Import the download icon
+import { AiOutlineDownload, AiFillStar } from 'react-icons/ai'; // Import the download and star icons
 
-const ApplicationsList = ({ applications }) => {
+const ApplicationsList = ({ applications, markAsViewed, markedApplications }) => {
   return (
     <div>
       <h2 className="text-3xl bg-purple-400 py-3 font-sans text-center mb-4">Job Applications</h2>
@@ -13,6 +13,7 @@ const ApplicationsList = ({ applications }) => {
             <th className="py-2">Position</th>
             <th className="py-2">Resume</th>
             <th className="py-2">Applied At</th>
+            <th className="py-2">Mark</th> {/* New header for marking */}
           </tr>
         </thead>
         <tbody>
@@ -24,22 +25,29 @@ const ApplicationsList = ({ applications }) => {
                 <td className="py-2 border">{application.position}</td>
                 <td className="py-2 border">
                   <a
-                      href={`server/uploads/resume/${application.resume.split('/').pop()}`}// Relative path to resume
+                    href={`server/uploads/resume/${application.resume.split('/').pop()}`} // Relative path to resume
                     download={application.resume.split('/').pop()} // Filename for download
                     className="text-blue-500 underline flex items-center justify-center" // Added flex for alignment
                   >
                     <AiOutlineDownload className="mr-2" /> {/* Download icon */}
                     Download Resume
                   </a>
-
-
                 </td>
                 <td className="py-2 border">{new Date(application.appliedAt).toLocaleString()}</td>
+                <td className="py-2 border">
+                  <button onClick={() => markAsViewed(application._id)} className="text-yellow-500">
+                    {markedApplications.has(application._id) ? (
+                      <AiFillStar className="text-xl" /> // Star icon if marked
+                    ) : (
+                      <span className="text-gray-400 text-xl">☆</span> // Empty star if not marked
+                    )}
+                  </button>
+                </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="5" className="py-4">No applications available.</td>
+              <td colSpan="6" className="py-4">No applications available.</td>
             </tr>
           )}
         </tbody>
