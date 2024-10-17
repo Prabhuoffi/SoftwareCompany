@@ -7,9 +7,8 @@ import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
 import { HiArrowRight } from 'react-icons/hi';
 import Modal from 'react-modal';
-import LandingPageImage from '../assets/landingpage.jpg'; // Import local image
+import LandingPageImage from '../assets/landingpage.jpg'; 
 
-// Import Slick Carousel CSS
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 

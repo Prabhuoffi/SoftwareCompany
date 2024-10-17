@@ -44,7 +44,6 @@ const AdminDashboard = () => {
 
   const token = localStorage.getItem('token');
   const userRole = localStorage.getItem('role');
-
   const fetchJobs = useCallback(async () => {
     setLoading(true);
     try {
@@ -68,8 +67,7 @@ const AdminDashboard = () => {
       });
       setApplications(res.data);
     } catch (error) {
-      console.error('Error fetching applications:', error);
-      setNotification('Failed to fetch applications.');
+      
     } finally {
       setLoading(false);
     }
