@@ -48,7 +48,7 @@ Best Regards,
 
     try {
       await axios.post(
-        'https://server-production-8575.up.railway.app/api/send-profile',
+        'http://localhost:5000/api/send-profile',
         {
           to: hrEmail,
           interviewDetails: `Candidate Name: ${name}\nCandidate Email: ${email}\n\n${interviewInfo}`,

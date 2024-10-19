@@ -18,7 +18,7 @@ const Career = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await axios.get('https://server-production-8575.up.railway.app/jobs');
+        const res = await axios.get('http://localhost:5000/api/jobs');
         setJobs(res.data);
       } catch (error) {
         console.error('Error fetching jobs:', error);
@@ -45,7 +45,7 @@ const Career = () => {
 
     try {
       setLoading(true);
-      await axios.post('https://server-production-8575.up.railway.app/applications', data, {
+      await axios.post('http://localhost:5000/api/applications/', data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setIsSubmitted(true);

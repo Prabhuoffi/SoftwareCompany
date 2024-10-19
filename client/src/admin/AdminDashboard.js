@@ -47,7 +47,7 @@ const AdminDashboard = () => {
   const fetchJobs = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await axios.get('https://server-production-8575.up.railway.app/api/jobs', {
+      const res = await axios.get('http://localhost:5000/api/jobs', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setJobs(res.data);
@@ -62,7 +62,7 @@ const AdminDashboard = () => {
   const fetchApplications = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await axios.get('https://server-production-8575.up.railway.app/api/applications', {
+      const res = await axios.get('http://localhost:5000/api/applications', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setApplications(res.data);
@@ -106,7 +106,7 @@ const AdminDashboard = () => {
     try {
       if (editingJob) {
         if (userRole === 'admin') {
-          await axios.put(`https://server-production-8575.up.railway.app/api/jobs/${editingJob._id}`, formData, {
+          await axios.put(`http://localhost:5000/api/jobs/${editingJob._id}`, formData, {
             headers: { Authorization: `Bearer ${token}` },
           });
           setNotification('Job updated successfully!');

@@ -28,12 +28,8 @@ const Navbar = ({ darkMode, toggleTheme }) => {
     { to: '/careers', label: 'Careers' },
     { to: '/partners', label: 'Partners' },
     { to: '/faq', label: 'FAQ' },
-<<<<<<< HEAD
-    {to :'/register',label:'Register'}
-=======
-    {to :'/register',label:'Register'},
->>>>>>> 13fe92775d0a64322b9528abe030986e266bcd7c
-  ];
+  {to:'/register',label:'Register' }
+]
 
   const dropdownVariants = {
     hidden: { opacity: 0, y: -10 },
