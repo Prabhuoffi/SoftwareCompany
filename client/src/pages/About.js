@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   FaLaptopCode,
   FaLightbulb,
@@ -7,14 +8,14 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 
-// Reusable Component for Sections
+// Reusable Section Component
 const Section = ({ children, className }) => (
   <section className={`py-16 px-8 md:px-24 ${className}`}>
     {children}
   </section>
 );
 
-// Reusable Component for Content Blocks
+// Reusable Content Block Component
 const ContentBlock = ({ Icon, title, description, initial, animate, transition }) => (
   <motion.div
     className="text-center mb-8 md:mb-0"
@@ -22,13 +23,13 @@ const ContentBlock = ({ Icon, title, description, initial, animate, transition }
     animate={animate}
     transition={transition}
   >
-    {Icon && <Icon className=" text-purple-400  text-5xl mb-4 mx-auto" />}
+    {Icon && <Icon className="text-purple-400 text-5xl mb-4 mx-auto" />}
     <h3 className="text-2xl font-semibold mb-2">{title}</h3>
     <p className="text-lg">{description}</p>
   </motion.div>
 );
 
-// Reusable Component for Team Members
+// Reusable Team Member Component
 const TeamMember = ({ image, name, position }) => (
   <motion.div
     className="text-center mb-8 md:mb-0"
@@ -47,7 +48,21 @@ const TeamMember = ({ image, name, position }) => (
 );
 
 const AboutUs = () => {
-  // Data Arrays for Services, Team, and Values
+  const [teamMembers, setTeamMembers] = useState([]);
+  // Fetch all team members
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/team');
+        setTeamMembers(response.data);
+      } catch (error) {
+        console.error('Error fetching team members:', error);
+      }
+    };
+    fetchTeamMembers();
+  }, []);
+
+  // Data Arrays for Services and Values
   const services = [
     {
       icon: FaLaptopCode,
@@ -63,24 +78,6 @@ const AboutUs = () => {
       icon: FaUsers,
       title: "Teamwork",
       description: "Collaborating closely with clients to achieve shared goals.",
-    },
-  ];
-
-  const teamMembers = [
-    {
-      image: "https://www.passionned.com/wp/wp-content/uploads/it-manager-1024x682.png",
-      name: "Jane Doe",
-      position: "Chief Executive Officer",
-    },
-    {
-      image: "https://th.bing.com/th/id/OIP.k3rrY7eKqLxuGovPkgrOPwHaE8?w=1409&h=941&rs=1&pid=ImgDetMain",
-      name: "John Smith",
-      position: "Lead Developer",
-    },
-    {
-      image: "https://th.bing.com/th/id/OIP.Y3omkDARuaMKyb7nT8LohQHaF7?w=750&h=600&rs=1&pid=ImgDetMain",
-      name: "Emily Johnson",
-      position: "Project Manager",
     },
   ];
 
@@ -127,35 +124,31 @@ const AboutUs = () => {
         </motion.p>
       </header>
 
-      {/* Our Vision & Mission */}
+      {/* Vision & Mission Section */}
       <Section>
         <div className="md:flex justify-between items-center">
-          {/* Our Vision */}
           <motion.div
             className="md:w-1/2 mb-8 md:mb-0"
             initial={{ x: -100, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
-            viewport={{ once: true }}
             transition={{ duration: 1 }}
           >
             <h2 className="text-3xl font-semibold mb-4 flex items-center">
-              <FaLightbulb className="text-purple-400  mr-2" /> Our Vision
+              <FaLightbulb className="text-purple-400 mr-2" /> Our Vision
             </h2>
             <p className="text-lg">
               To be a global leader in providing cutting-edge technology solutions that drive success and innovation for our clients.
             </p>
           </motion.div>
 
-          {/* Our Mission */}
           <motion.div
             className="md:w-1/2"
             initial={{ x: 100, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
-            viewport={{ once: true }}
             transition={{ duration: 1 }}
           >
             <h2 className="text-3xl font-semibold mb-4 flex items-center">
-              <FaHandshake className="text-purple-400  mr-2" /> Our Mission
+              <FaHandshake className="text-purple-400 mr-2" /> Our Mission
             </h2>
             <p className="text-lg">
               To deliver high-quality, scalable, and efficient solutions that meet the unique needs of our clients, fostering long-term partnerships and mutual growth.
@@ -164,26 +157,29 @@ const AboutUs = () => {
         </div>
       </Section>
 
-      {/* Our Services */}
+      {/* Services Section */}
       <Section className="bg-purple-200">
-        <h2 className="text-3xl font-semibold  text-center mb-12">Our Services</h2>
+        <h2 className="text-3xl font-semibold text-center mb-12">Our Services</h2>
         <div className="md:flex justify-around">
-          {services.map((service, index) => (
-            <motion.div
-              key={index}
-              className="text-center mb-8 md:mb-0 w-full md:w-1/3 px-4"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.3 }}
-            >
-              <service.icon className="text-purple-400  text-5xl mb-4 mx-auto" />
-              <h3 className="text-2xl font-semibold mb-2">{service.title}</h3>
-              <p className="text-lg">{service.description}</p>
-            </motion.div>
-          ))}
+          {services.map((service, index) => {
+            const Icon = service.icon;
+            return (
+              <motion.div
+                key={index}
+                className="text-center mb-8 md:mb-0 w-full md:w-1/3 px-4"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Icon className="text-purple-400 text-5xl mb-4 mx-auto" />
+                <h3 className="text-2xl font-semibold mb-2">{service.title}</h3>
+                <p className="text-lg">{service.description}</p>
+              </motion.div>
+            );
+          })}
         </div>
       </Section>
 
-      {/* Our Team */}
+      {/* Team Section */}
       <Section>
         <h2 className="text-3xl font-semibold text-center mb-12">Meet Our Team</h2>
         <div className="md:flex justify-around">
@@ -198,9 +194,9 @@ const AboutUs = () => {
         </div>
       </Section>
 
-      {/* Our Values */}
+      {/* Values Section */}
       <Section className="bg-purple-200">
-        <h2 className="text-3xl font-semibold  text-center mb-12">Our Values</h2>
+        <h2 className="text-3xl font-semibold text-center mb-12">Our Values</h2>
         <div className="md:flex justify-around">
           {values.map((value, index) => (
             <ContentBlock

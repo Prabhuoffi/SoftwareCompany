@@ -1,13 +1,12 @@
-// src/components/LandingPage.jsx
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaQuoteLeft, FaLaptopCode, FaMobileAlt, FaCloud, FaLock } from 'react-icons/fa';
+import { FaQuoteLeft} from 'react-icons/fa';
 import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
 import { HiArrowRight } from 'react-icons/hi';
 import Modal from 'react-modal';
-import LandingPageImage from '../assets/landingpage.jpg'; 
+import LandingPageImage from '../assets/landingpage.jpg';
+import axios from 'axios';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -35,6 +34,9 @@ const LandingPage = () => {
   // State for modal
   const [modalIsOpen, setIsOpen] = useState(false);
   const [modalImage, setModalImage] = useState('');
+  const [testimonials, setTestimonials] = useState([]);
+  const [features,setFeatures]= useState([]);
+  const [services,setServices]=useState([]);
 
   // Function to close modal
   const closeModal = () => {
@@ -51,7 +53,7 @@ const LandingPage = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 6000,
-    arrows: false, // Hide arrows for a cleaner look
+    arrows: false,
     adaptiveHeight: true,
   };
 
@@ -79,81 +81,43 @@ const LandingPage = () => {
     },
   };
 
-  // Testimonials data
-  const testimonials = [
-    {
-      quote: 'Exceptional service that exceeded our expectations. Highly recommended!',
-      name: 'Jane Doe',
-      position: 'CEO, Example Corp',
-      image: 'https://randomuser.me/api/portraits/women/44.jpg',
-    },
-    {
-      quote: 'Innovative solutions improved our processes. A true partner in success.',
-      name: 'John Smith',
-      position: 'CTO, Tech Solutions',
-      image: 'https://randomuser.me/api/portraits/men/46.jpg',
-    },
-    {
-      quote: 'Dedicated team that delivers quality work on time. Highly satisfied!',
-      name: 'Emily Johnson',
-      position: 'Marketing Manager, Creative Agency',
-      image: 'https://randomuser.me/api/portraits/women/47.jpg',
-    },
-    {
-      quote: 'Expertise in software development is unmatched. Transformed our ideas!',
-      name: 'Michael Brown',
-      position: 'Founder, Startup Inc.',
-      image: 'https://randomuser.me/api/portraits/men/48.jpg',
-    },
-  ];
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/testimonials');
+        setTestimonials(response.data);
+      } catch (error) {
+        console.error("Error fetching testimonials:", error);
+      }
+    };
+    fetchTestimonials();
+  }, []);
+ 
+   
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/services');
+        console.log("Fetched services:", response.data); // Debugging
+        setServices(response.data);
+      } catch (error) {
+        console.error("Error fetching services:", error);
+      }
+    };
+    fetchServices();
+  }, []);
 
-  // Products data
-  const products = [
-    {
-      name: 'Web Development',
-      description: 'Responsive and dynamic websites tailored to your business needs.',
-      icon: <FaLaptopCode size={40} className="text-pink-500 mx-auto mb-4" />,
-    },
-    {
-      name: 'Mobile Applications',
-      description: 'User-friendly mobile apps for iOS and Android platforms.',
-      icon: <FaMobileAlt size={40} className="text-pink-500 mx-auto mb-4" />,
-    },
-    {
-      name: 'Cloud Services',
-      description: 'Scalable and secure cloud solutions to enhance your operations.',
-      icon: <FaCloud size={40} className="text-pink-500 mx-auto mb-4" />,
-    },
-    {
-      name: 'Cybersecurity',
-      description: 'Robust security measures to protect your digital assets.',
-      icon: <FaLock size={40} className="text-pink-500 mx-auto mb-4" />,
-    },
-  ];
-
-  // Features data
-  const features = [
-    {
-      title: 'Innovative Solutions',
-      description: 'Leveraging the latest technologies to drive your business forward.',
-      icon: <FaLaptopCode size={30} className="text-pink-500" />,
-    },
-    {
-      title: 'Expert Team',
-      description: 'Dedicated professionals providing top-notch services and support.',
-      icon: <FaMobileAlt size={30} className="text-pink-500" />,
-    },
-    {
-      title: 'Customer Focused',
-      description: 'Prioritizing client needs to ensure satisfaction and long-term partnerships.',
-      icon: <FaCloud size={30} className="text-pink-500" />,
-    },
-    {
-      title: 'Quality Assurance',
-      description: 'Commitment to excellence meets the highest standards.',
-      icon: <FaLock size={30} className="text-pink-500" />,
-    },
-  ];
+  useEffect(() => {
+    const fetchFeatures = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/features'); // Adjust the API endpoint
+        setFeatures(response.data);
+      } catch (error) {
+        console.error("Error fetching features:", error);
+      }
+    };
+    fetchFeatures();
+  }, []);
 
   return (
     <div className="bg-gradient-to-r from-purple-100 via-pink-100 to-blue-100 flex flex-col min-h-screen">
@@ -233,12 +197,21 @@ const LandingPage = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Our Services</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.map((product, index) => (
-              <motion.div key={index} variants={cardVariants} className="bg-white p-6 rounded-lg shadow-lg text-center transition-transform duration-300 hover:scale-105">
-                {product.icon}
-                <h3 className="text-xl font-semibold my-4">{product.name}</h3>
-                <p className="text-gray-600">{product.description}</p>
-              </motion.div>
+            {services.map((product, index) => (
+              <motion.div
+              key={index}
+              variants={cardVariants}
+              className="bg-white p-6 rounded-lg shadow-lg text-center transition-transform duration-300 hover:scale-105"
+            >
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-15 h-10 object-cover mb-4 mx-auto" // Updated classes
+              />
+              <h3 className="text-xl font-semibold my-4">{product.name}</h3>
+              <p className="text-gray-600">{product.description}</p>
+            </motion.div>
+            
             ))}
           </div>
         </div>
@@ -246,19 +219,20 @@ const LandingPage = () => {
 
       {/* Features Section */}
       <motion.section initial="hidden" whileInView="visible" variants={containerVariants} className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose Us?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, index) => (
-              <motion.div key={index} variants={cardVariants} className="bg-gray-100 p-6 rounded-lg shadow-lg text-center transition-transform duration-300 hover:scale-105">
-                {feature.icon}
-                <h3 className="text-xl font-semibold my-4">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
-              </motion.div>
-            ))}
-          </div>
+      <div className="container mx-auto px-4">
+        <h2 className="text-3xl font-bold text-center mb-12">Why Choose Us?</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {features.map((feature, index) => (
+            <motion.div key={index} variants={cardVariants} className="bg-white p-6 rounded-lg shadow-lg text-center transition-transform duration-300 hover:scale-105">
+              {/* Render the image */}
+              <img src={feature.image} alt={feature.name} className="w-15 h-10 object-cover mb-4 rounded" />
+              <h3 className="text-xl font-semibold my-4">{feature.title}</h3>
+              <p className="text-gray-600">{feature.description}</p>
+            </motion.div>
+          ))}
         </div>
-      </motion.section>
+      </div>
+    </motion.section>
 
       {/* Call to Action Section */}
       <motion.section initial="hidden" whileInView="visible" variants={sectionVariants} className="py-20 bg-gradient-to-r from-pink-300 to-purple-500 text-white text-center">

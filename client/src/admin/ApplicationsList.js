@@ -25,17 +25,26 @@ const ApplicationsList = ({ applications, markAsViewed, markedApplications }) =>
                 <td className="py-2 border">{application.position}</td>
                 <td className="py-2 border">
                   <a
-                    href={`server/uploads/resume/${application.resume.split('/').pop()}`} // Relative path to resume
+                    href={application.resume} // Ensure correct property is accessed
                     download={application.resume.split('/').pop()} // Filename for download
-                    className="text-blue-500 underline flex items-center justify-center" // Added flex for alignment
+                    target="_blank" // Open the resume in a new tab
+                    rel="noopener noreferrer" // Security improvement
+                    className="flex items-center justify-center text-blue-500 underline hover:text-blue-700 transition duration-200 w-full h-full" // Added full width and height
+                    aria-label={`Download resume for ${application.name}`} // Accessibility improvement
                   >
-                    <AiOutlineDownload className="mr-2" /> {/* Download icon */}
+                    <span className="mr-2">
+                      <AiOutlineDownload /> {/* Download icon */}
+                    </span>
                     Download Resume
                   </a>
                 </td>
                 <td className="py-2 border">{new Date(application.appliedAt).toLocaleString()}</td>
                 <td className="py-2 border">
-                  <button onClick={() => markAsViewed(application._id)} className="text-yellow-500">
+                  <button 
+                    onClick={() => markAsViewed(application._id)} 
+                    className="text-yellow-500"
+                    aria-label={`Mark ${application.name} as viewed`} // Accessibility improvement
+                  >
                     {markedApplications.has(application._id) ? (
                       <AiFillStar className="text-xl" /> // Star icon if marked
                     ) : (

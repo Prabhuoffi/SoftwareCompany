@@ -22,9 +22,9 @@ const Login = () => {
 
       // Redirect based on role
       if (res.data.role === 'admin') {
-        navigate('/admin'); // Redirect admins to Admin Dashboard
+        navigate('/hr-dashboard'); // Redirect admins to Admin Dashboard
       } else if (res.data.role === 'user') {
-        navigate('/admin'); // Redirect users to Home Page
+        navigate('/admin-dashboard'); // Redirect users to Home Page
       }
     } catch (error) {
       console.error(error.response.data.message);
@@ -33,14 +33,14 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center items-center h-screen bg-gradient-to-r from-purple-100 to-pink-100">
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <h2 className="text-2xl mb-6 text-center">Login</h2>
         <input
           type="email"
           name="email"
           placeholder="Email"
-          className="w-full p-3 mb-4 border rounded"
+          className="w-full p-3 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
           value={formData.email}
           onChange={handleChange}
           required
@@ -49,7 +49,7 @@ const Login = () => {
           type="password"
           name="password"
           placeholder="Password"
-          className="w-full p-3 mb-4 border rounded"
+          className="w-full p-3 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
           value={formData.password}
           onChange={handleChange}
           required

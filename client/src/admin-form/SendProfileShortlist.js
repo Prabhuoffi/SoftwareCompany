@@ -5,11 +5,11 @@ import { ToastContainer, toast } from 'react-toastify'; // Import toast and Toas
 import 'react-toastify/dist/ReactToastify.css'; // Import CSS for toast notifications
 
 const SendProfileShortlist = ({ applications, hrEmail, interviewDetails, loading }) => {
-  const [sending, setSending] = useState(false);
+  const [sending] = useState(false);
 
   const sendProfileShortlist = async (application) => {
     const { email, name } = application;
-    const { date, place, time ,role ,hrContact } = interviewDetails;
+    const { date, place, time, role, hrContact } = interviewDetails;
 
     if (!hrEmail) {
       toast.error('Please provide HR email address.');
@@ -28,11 +28,11 @@ Date: ${date}
 
 Place: ${place}
 
-Role:${role}
+Role: ${role}
 
 Time: ${time}
 
-HR Contact :${hrContact}
+HR Contact: ${hrContact}
 
 Please be prepared with the following:
 - Updated resume
@@ -44,7 +44,6 @@ We look forward to meeting you!
 Best Regards,
 [Techworka]
 `;
-
 
     try {
       await axios.post(
@@ -61,30 +60,6 @@ Best Regards,
     } catch (error) {
       console.error('Error sending profile:', error);
       toast.error(`Failed to send profile for ${name}.`);
-    }
-  };
-
-  const handleSendAll = async () => {
-    if (!hrEmail) {
-      toast.error('Please provide HR email address.');
-      return;
-    }
-
-    if (!interviewDetails.date || !interviewDetails.place || !interviewDetails.time) {
-      toast.error('Please fill out all interview details.');
-      return;
-    }
-
-    setSending(true);
-    try {
-      for (const application of applications) {
-        await sendProfileShortlist(application);
-      }
-      toast.success('All profiles sent to HR successfully!');
-    } catch (error) {
-      // Error handling is already done in sendProfileShortlist
-    } finally {
-      setSending(false);
     }
   };
 
@@ -126,17 +101,6 @@ Best Regards,
           )}
         </tbody>
       </table>
-      {applications.length > 0 && (
-        <button
-          onClick={handleSendAll}
-          className={`mt-4 bg-blue-600 text-white p-3 rounded flex items-center ${
-            sending || loading ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
-          disabled={sending || loading}
-        >
-          {sending || loading ? 'Sending All...' : 'Send All Shortlists In HR'} <FaPaperPlane className="ml-2" />
-        </button>
-      )}
       <ToastContainer position="top-right" autoClose={3000} /> {/* Add ToastContainer here */}
     </div>
   );

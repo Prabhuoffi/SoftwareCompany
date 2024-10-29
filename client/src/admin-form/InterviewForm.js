@@ -8,7 +8,7 @@ const InterviewForm = ({ hrEmail, setHrEmail, interviewDetails, handleInterviewC
     <input
       type="email"
       name="hrEmail"
-      placeholder="HR Email"
+      placeholder="Candidate Email"
       className="w-full p-3 mb-4 border rounded"
       value={hrEmail}
       onChange={(e) => setHrEmail(e.target.value)}
@@ -63,13 +63,9 @@ const InterviewForm = ({ hrEmail, setHrEmail, interviewDetails, handleInterviewC
       required
     />
     
-    <button
-      type="button"
-      onClick={() => applications.forEach(sendProfileShortlist)}
-      className="bg-green-600 text-white p-3 rounded flex items-center"
-    >
-      <FaUserCheck className="mr-2" /> Send Interview Details
-    </button>
+    <div className="bg-green-600  w-72  px-10 text-white p-3">
+      <FaUserCheck className="mr-2 " /> Send Interview Details
+    </div>
   </form>
 );
 
